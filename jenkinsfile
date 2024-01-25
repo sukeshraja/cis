@@ -2,19 +2,30 @@ pipeline {
     agent any
 
     stages {
-        stage ('Compile Stage') {
-
+        stage('Compile') {
             steps {
-                 
-                    sh 'mvn clean compile'
-                }
+                // Check out the source code
+                checkout scm
+
+                // Compile the project using default Maven installation
+                sh 'mvn clean compile'
             }
         }
 
-        stage ('Testing Stage') {
-
+        stage('Test') {
             steps {
-                    sh 'mvn test'
-                }
+                // Test the project using default Maven installation
+                sh 'mvn test'
             }
         }
+    }
+
+    post {
+        success {
+            echo 'Compile and Test stages succeeded. Notify or perform additional actions here.'
+        }
+        failure {
+            echo 'Compile and Test stages failed. Notify or perform cleanup actions here.'
+        }
+    }
+}
